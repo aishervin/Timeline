@@ -84,3 +84,37 @@
   animation: fadeIn 0.18s ease-out forwards;
 }
 
+@keyframes waveSilverGradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.animated-silver-gradient {
+  background: linear-gradient(
+    45deg,
+    #ffffff 0%,
+    #e2e8f0 18%,
+    #94a3b8 35%,
+    #05080e 50%,
+    #64748b 66%,
+    #cbd5e1 82%,
+    #ffffff 100%
+  );
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  animation: waveSilverGradient 4s ease-in-out infinite;
+  display: inline-block;
+  letter-spacing: 0.08em;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
+}
+
