@@ -74,27 +74,34 @@ export const MobileFriendlyScrubber: React.FC<MobileFriendlyScrubberProps> = ({
   };
 
   return (
-    <div className="w-full flex flex-col items-end pointer-events-none select-none">
-      {/* Top Corner Subtle Brand Signature */}
-      <div className="flex items-center gap-1.5 px-3 mb-1 select-none pointer-events-none">
-        <span className="animated-silver-gradient text-[10px] sm:text-[11px] font-mono tracking-wider font-semibold">
+    <div
+      id="spacetime-mobile-scrubber"
+      className="w-full neumorph-panel rounded-3xl px-3 py-2 sm:px-4 sm:py-2.5 flex flex-col gap-1 select-none pointer-events-auto touch-none"
+      onPointerDown={(e) => e.stopPropagation()}
+      onTouchStart={(e) => e.stopPropagation()}
+      style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
+    >
+      {/* Top Header Row inside the playback panel: Elegant Brand Signature above timeline */}
+      <div className="w-full flex items-center justify-between px-1 select-none pointer-events-none">
+        <span className="text-[9px] font-mono text-slate-500 uppercase tracking-wider select-none">
+          TIMELINE
+        </span>
+        <span
+          className="animated-silver-gradient text-[10px] sm:text-[11px] font-mono tracking-wider font-semibold select-none leading-none"
+          style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
+        >
           Exclusive ☬SHΞN™ made
         </span>
       </div>
 
-      {/* Neumorphic Scrubber Bar */}
-      <div
-        id="spacetime-mobile-scrubber"
-        className="w-full neumorph-panel rounded-full px-2.5 py-1.5 sm:px-3 sm:py-2 flex items-center gap-1.5 sm:gap-2.5 touch-none select-none pointer-events-auto"
-        onPointerDown={(e) => e.stopPropagation()}
-        onTouchStart={(e) => e.stopPropagation()}
-      >
+      {/* Main Controls Row: Buttons, Rail, and Frame Counter */}
+      <div className="w-full flex items-center gap-1.5 sm:gap-2.5">
         {/* 1. Step Backward (-1 Frame, Arrow Pointing Left) */}
         <button
           type="button"
           onClick={() => stepFrame(-1)}
           disabled={disabled || currentIndex <= 0}
-          className="neumorph-btn w-7 h-7 rounded-full text-slate-300 hover:text-white flex items-center justify-center disabled:opacity-25 flex-shrink-0 cursor-pointer"
+          className="neumorph-btn w-7 h-7 rounded-full text-slate-300 hover:text-white flex items-center justify-center disabled:opacity-25 flex-shrink-0 cursor-pointer select-none"
           title="یک فریم قبل (قبلی)"
         >
           <ChevronLeft className="w-4 h-4" />
@@ -105,7 +112,7 @@ export const MobileFriendlyScrubber: React.FC<MobileFriendlyScrubberProps> = ({
           type="button"
           onClick={onTogglePlay}
           disabled={disabled}
-          className="neumorph-btn-accent w-8 h-8 rounded-full text-white flex items-center justify-center flex-shrink-0 cursor-pointer"
+          className="neumorph-btn-accent w-8 h-8 rounded-full text-white flex items-center justify-center flex-shrink-0 cursor-pointer select-none"
           title={isPlaying ? 'توقف' : 'پخش زمان'}
         >
           {isPlaying ? (
@@ -120,7 +127,7 @@ export const MobileFriendlyScrubber: React.FC<MobileFriendlyScrubberProps> = ({
           type="button"
           onClick={() => stepFrame(1)}
           disabled={disabled || currentIndex >= totalFrames - 1}
-          className="neumorph-btn w-7 h-7 rounded-full text-slate-300 hover:text-white flex items-center justify-center disabled:opacity-25 flex-shrink-0 cursor-pointer"
+          className="neumorph-btn w-7 h-7 rounded-full text-slate-300 hover:text-white flex items-center justify-center disabled:opacity-25 flex-shrink-0 cursor-pointer select-none"
           title="یک فریم بعد (بعدی)"
         >
           <ChevronRight className="w-4 h-4" />
@@ -136,6 +143,7 @@ export const MobileFriendlyScrubber: React.FC<MobileFriendlyScrubberProps> = ({
           className={`relative flex-1 h-8 flex items-center cursor-pointer touch-none select-none px-1 ${
             disabled ? 'opacity-40 pointer-events-none' : ''
           }`}
+          style={{ userSelect: 'none', WebkitUserSelect: 'none' }}
         >
           {/* Inset Deep Rail */}
           <div className="relative w-full h-2 neumorph-rail rounded-full overflow-hidden">
@@ -148,7 +156,7 @@ export const MobileFriendlyScrubber: React.FC<MobileFriendlyScrubberProps> = ({
 
           {/* Tactile Neumorphic Thumb */}
           <div
-            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-none"
+            className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-none select-none"
             style={{ left: `${percent}%` }}
           >
             <div
@@ -165,7 +173,7 @@ export const MobileFriendlyScrubber: React.FC<MobileFriendlyScrubberProps> = ({
         </div>
 
         {/* 5. Compact Numeric Badge */}
-        <div className="neumorph-inset flex items-center gap-1 font-mono text-[10px] sm:text-[11px] text-slate-300 rounded-full px-2 py-0.5 flex-shrink-0">
+        <div className="neumorph-inset flex items-center gap-1 font-mono text-[10px] sm:text-[11px] text-slate-300 rounded-full px-2 py-0.5 flex-shrink-0 select-none">
           <span className="text-sky-400 font-semibold">{currentIndex + 1}</span>
           <span className="text-slate-600">/</span>
           <span className="text-slate-400">{totalFrames}</span>

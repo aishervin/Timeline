@@ -7,10 +7,14 @@ import { SpacetimeVolume } from './components/SpacetimeVolume';
 import { VideoUploader } from './components/VideoUploader';
 import { MobileFriendlyScrubber } from './components/MobileFriendlyScrubber';
 import { SettingsDrawer, AppSettings } from './components/SettingsDrawer';
+import { IntroPrismOverlay } from './components/IntroPrismOverlay';
+import { ExplodingLogoLoader } from './components/ExplodingLogoLoader';
 import { VideoFrameDeckExtractor, VideoSlice2D, DeckProgress } from './services/deckExtractor';
 import { BakeProgress } from './services/videoBaker';
 
 export default function App() {
+  const [showIntro, setShowIntro] = useState<boolean>(true);
+  const [isExploding, setIsExploding] = useState<boolean>(false);
   const [slices, setSlices] = useState<VideoSlice2D[]>([]);
   const [targetFrameCount, setTargetFrameCount] = useState<number>(48);
   const [hudVisible, setHudVisible] = useState<boolean>(true);
@@ -70,6 +74,7 @@ export default function App() {
   const handleVideoUpload = useCallback(async (file: File, frameCount: number) => {
     if (!deckExtractorRef.current) return;
     setIsBaking(true);
+    setIsExploding(false);
     try {
       const result = await deckExtractorRef.current.extractFrames(
         file,
@@ -101,12 +106,21 @@ export default function App() {
         name: file.name,
       });
 
+      // Trigger the spectacular pixel explosion into the spacetime cube
+      setIsExploding(true);
+
       // Start scrubber at 1.0 (end of sequence)
       setCurrentScroll(1.0);
+
+      // Allow explosion particles to disperse gracefully before fading out baking overlay
+      setTimeout(() => {
+        setIsBaking(false);
+        setIsExploding(false);
+      }, 1200);
     } catch (err) {
       console.error('Failed to extract video frames:', err);
-    } finally {
       setIsBaking(false);
+      setIsExploding(false);
     }
   }, []);
 
@@ -307,32 +321,124 @@ export default function App() {
         hasVideo={hasVideo}
       />
 
-      {/* Initial Clean Center Prompt when no video is uploaded yet */}
+      {/* Center Screen: Upload Box (when idle) OR 3D Spinning/Exploding Logo + Progress bar (when baking) */}
       {!hasVideo && (
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center p-4 pointer-events-none">
-          <VideoUploader
-            onVideoSelected={handleVideoUpload}
-            isBaking={isBaking}
-            progress={progress}
-            frameCount={targetFrameCount}
-            onFrameCountChange={setTargetFrameCount}
-            hasVideo={hasVideo}
-          />
+          {isBaking ? (
+            /* During Video Loading: Only the 3D spinning logo in center with its slim progress bar beneath */
+            <div className="flex flex-col items-center justify-center pointer-events-auto">
+              <div className="pointer-events-none">
+                <ExplodingLogoLoader
+                  isExploding={isExploding}
+                  progressPercent={progress.progress}
+                />
+              </div>
+
+              <div
+                id="baking-progress-card"
+                className="w-full max-w-xs neumorph-panel rounded-2xl p-3.5 shadow-2xl mt-1 select-none"
+                dir="rtl"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <img
+                      src="https://github.com/aishervin/Xrayng/blob/main/Picsart_26-08-07_19-36-12-944.png?raw=true"
+                      alt="Shen Logo"
+                      className="w-4 h-4 object-contain animate-spin-y"
+                      referrerPolicy="no-referrer"
+                    />
+                    <span className="text-[11px] font-semibold text-slate-200">
+                      در حال ساخت فضا‌زمان ویدیو...
+                    </span>
+                  </div>
+                  <span className="text-xs font-mono font-semibold text-sky-400">
+                    {(progress.progress * 100).toFixed(0)}%
+                  </span>
+                </div>
+
+                <div className="w-full h-1.5 neumorph-rail rounded-full overflow-hidden mb-1.5">
+                  <div
+                    className="h-full bg-gradient-to-r from-sky-500 to-emerald-400 transition-all duration-150 ease-out"
+                    style={{ width: `${Math.max(4, progress.progress * 100)}%` }}
+                  />
+                </div>
+
+                <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                  <span>{progress.message}</span>
+                  <span>
+                    {progress.currentFrame} / {progress.totalFrames} فریم
+                  </span>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* Idle: Normal Upload Box */
+            <VideoUploader
+              onVideoSelected={handleVideoUpload}
+              isBaking={isBaking}
+              progress={progress}
+              frameCount={targetFrameCount}
+              onFrameCountChange={setTargetFrameCount}
+              hasVideo={hasVideo}
+            />
+          )}
         </div>
       )}
 
-      {/* Progress Toast (if re-extracting after upload) */}
+      {/* When video is reloaded from header while already having a video */}
       {hasVideo && isBaking && (
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-          <VideoUploader
-            onVideoSelected={handleVideoUpload}
-            isBaking={isBaking}
-            progress={progress}
-            frameCount={targetFrameCount}
-            onFrameCountChange={setTargetFrameCount}
-            hasVideo={hasVideo}
-          />
+        <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-4 pointer-events-none">
+          <div className="pointer-events-auto flex flex-col items-center justify-center">
+            <ExplodingLogoLoader
+              isExploding={isExploding}
+              progressPercent={progress.progress}
+            />
+            <div
+              id="re-baking-progress-card"
+              className="w-full max-w-xs neumorph-panel rounded-2xl p-3.5 shadow-2xl mt-1 select-none"
+              dir="rtl"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <img
+                    src="https://github.com/aishervin/Xrayng/blob/main/Picsart_26-08-07_19-36-12-944.png?raw=true"
+                    alt="Shen Logo"
+                    className="w-4 h-4 object-contain animate-spin-y"
+                    referrerPolicy="no-referrer"
+                  />
+                  <span className="text-[11px] font-semibold text-slate-200">
+                    در حال استخراج فریم‌های جدید...
+                  </span>
+                </div>
+                <span className="text-xs font-mono font-semibold text-sky-400">
+                  {(progress.progress * 100).toFixed(0)}%
+                </span>
+              </div>
+
+              <div className="w-full h-1.5 neumorph-rail rounded-full overflow-hidden mb-1.5">
+                <div
+                  className="h-full bg-gradient-to-r from-sky-500 to-emerald-400 transition-all duration-150 ease-out"
+                  style={{ width: `${Math.max(4, progress.progress * 100)}%` }}
+                />
+              </div>
+
+              <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
+                <span>{progress.message}</span>
+                <span>
+                  {progress.currentFrame} / {progress.totalFrames} فریم
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
+      )}
+
+      {/* 10-second Intro Prism Overlay with Glitch Title and accelerated rotation */}
+      {showIntro && (
+        <IntroPrismOverlay
+          durationSeconds={10}
+          onFinish={() => setShowIntro(false)}
+        />
       )}
 
       {/* Neumorphic Time Scrubber Capsule */}

@@ -1,6 +1,9 @@
 import React, { useRef, useState } from 'react';
-import { Upload, Cpu } from 'lucide-react';
+import { Upload } from 'lucide-react';
 import { BakeProgress } from '../services/videoBaker';
+
+const LOGO_SRC =
+  'https://github.com/aishervin/Xrayng/blob/main/Picsart_26-08-07_19-36-12-944.png?raw=true';
 
 interface VideoUploaderProps {
   onVideoSelected: (file: File, frameCount: number) => void;
@@ -49,7 +52,7 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
     }
   };
 
-  // If baking, show a compact floating progress card with neumorphic look
+  // If baking, show a compact floating progress card with neumorphic look & spinning logo icon
   if (isBaking) {
     return (
       <div
@@ -57,9 +60,17 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
         className="w-full max-w-sm neumorph-panel rounded-2xl p-4 shadow-2xl animate-fade-in pointer-events-auto select-none"
         dir="rtl"
       >
-        <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2">
-            <Cpu className="w-4 h-4 text-sky-400 animate-spin" />
+        <div className="flex items-center justify-between mb-2.5">
+          <div className="flex items-center gap-2.5">
+            {/* Spinning mini logo in 3D vertical Y-axis */}
+            <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center">
+              <img
+                src={LOGO_SRC}
+                alt="Shen Logo"
+                className="w-5 h-5 object-contain animate-spin-y drop-shadow-[0_0_6px_rgba(56,189,248,0.7)]"
+                referrerPolicy="no-referrer"
+              />
+            </div>
             <span className="text-xs font-semibold text-slate-200">
               در حال استخراج فریم‌های ویدیو...
             </span>
@@ -91,7 +102,7 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
     return null;
   }
 
-  // Initial clean upload dropzone card with neumorphic styling
+  // Initial clean upload dropzone card with neumorphic styling (redundant description removed)
   return (
     <div
       id="video-initial-uploader"
@@ -102,9 +113,6 @@ export const VideoUploader: React.FC<VideoUploaderProps> = ({
         <h2 className="text-base font-bold text-white tracking-wide">
           بارگذاری ویدیوی فضا‌زمان
         </h2>
-        <p className="text-xs text-slate-400">
-          ابعاد باکس و برش‌ها بدون قاب و دقیقاً متناسب با ویدیوی شما تنظیم می‌شود
-        </p>
       </div>
 
       {/* Drag and drop zone with neumorphic inset */}
