@@ -1,0 +1,6 @@
+{
+  "name": "Spacetime Volume - Temporal Tomography",
+  "description": "Convert video into an interactive 3D Spacetime Volume with client-side WebGL2 volumetric raymarching, temporal tomography, and physical laboratory frame.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

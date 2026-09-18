@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+/* Neumorphic Dark Design Utilities */
+.neumorph-panel {
+  background: #0d121c;
+  box-shadow: 6px 6px 16px #030508, -5px -5px 14px rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.neumorph-panel-lg {
+  background: #0c1018;
+  box-shadow: 10px 10px 24px #030407, -8px -8px 20px rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.neumorph-btn {
+  background: linear-gradient(145deg, #131926, #0c1018);
+  box-shadow: 4px 4px 10px #04060a, -3px -3px 8px rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.neumorph-btn:hover {
+  background: linear-gradient(145deg, #171f2e, #0e131d);
+  box-shadow: 5px 5px 12px #030508, -3px -3px 9px rgba(255, 255, 255, 0.06);
+}
+
+.neumorph-btn:active, .neumorph-btn-pressed {
+  background: #090d14 !important;
+  box-shadow: inset 3px 3px 6px #030407, inset -2px -2px 5px rgba(255, 255, 255, 0.04) !important;
+  transform: scale(0.98);
+}
+
+.neumorph-btn-accent {
+  background: linear-gradient(145deg, #0284c7, #0369a1);
+  box-shadow: 4px 4px 12px rgba(2, 132, 199, 0.35), -2px -2px 6px rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.neumorph-btn-accent:hover {
+  background: linear-gradient(145deg, #0396e3, #0274b0);
+  box-shadow: 5px 5px 15px rgba(2, 132, 199, 0.45), -2px -2px 8px rgba(255, 255, 255, 0.1);
+}
+
+.neumorph-btn-accent:active {
+  background: #026499 !important;
+  box-shadow: inset 3px 3px 6px rgba(0, 0, 0, 0.5), inset -2px -2px 4px rgba(255, 255, 255, 0.1) !important;
+  transform: scale(0.98);
+}
+
+.neumorph-inset {
+  background: #080c13;
+  box-shadow: inset 3px 3px 8px #030407, inset -2px -2px 6px rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.neumorph-rail {
+  background: #070a10;
+  box-shadow: inset 2px 2px 5px #020305, inset -1px -1px 4px rgba(255, 255, 255, 0.03);
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-slide-down {
+  animation: slideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.18s ease-out forwards;
+}
+
